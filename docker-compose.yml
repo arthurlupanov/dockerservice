@@ -1,0 +1,47 @@
+﻿version: "3"
+services:
+  web:    
+    build:    
+      context: ./DockerService
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    #volumes:
+    #  - ./DockerService:c:/inetpub/wwwroot
+    deploy:
+      replicas: 1
+    networks:
+      - webnet            
+    depends_on:
+      - "db"    
+  db:
+    image: microsoft/mssql-server-windows-developer
+    ports:
+      - "1433:1433"
+    environment:
+      - sa_password=!QAZ2wsx  
+      - ACCEPT_EULA=Y 
+    networks:
+      - webnet      
+  worker:
+    build:
+      context: ./DockerWorker
+      dockerfile: Dockerfile
+    deploy:
+      replicas: 1
+    networks:
+      - webnet            
+    depends_on:
+      - "web"    
+  worker2:
+    build:
+      context: ./DockerWorker
+      dockerfile: Dockerfile
+    deploy:
+      replicas: 1
+    networks:
+      - webnet            
+    depends_on:
+      - "web"    
+networks:
+  webnet:

@@ -1,0 +1,41 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="LocalDeploy" ToolsVersion="4.0">
+   <Target Name="LocalDeployProperties">
+      <PropertyGroup>         
+         <PublishProfile>FolderProfile</PublishProfile>                  
+      </PropertyGroup>
+   </Target>
+   <!--
+   <Target Name="AzureDeployProperties">
+      <PropertyGroup>
+         <PublishProfile>stageVerdeEnergy</PublishProfile>
+         <PublishProfileAdmin>stageVerdeEnergyAdmin</PublishProfileAdmin>
+         <TagPrefix>stage</TagPrefix>
+      </PropertyGroup>
+   </Target>
+   -->   
+   <ItemGroup>
+      <ProjectToBuild Include="..\DockerService.sln">
+         <Properties>Configuration=Release</Properties>
+      </ProjectToBuild>
+   </ItemGroup>  
+   <Target Name="PrebuildCheck">
+      <MSBuild Projects="@(ProjectToBuild)"
+               BuildInParallel="true"
+               ContinueOnError="false"/>
+   </Target>
+   <Target Name="Deploy" DependsOnTargets="PrebuildCheck">
+      <MSBuild Projects="..\DockerService\DockerMVC.csproj"
+               Properties="DeployOnBuild=true;PublishProfile=$(PublishProfile);"
+               ContinueOnError="false" />      
+   </Target>
+   <Target Name="LocalDeploy" DependsOnTargets="LocalDeployProperties">
+      <CallTarget Targets="Deploy"/>
+      <Message Text="Dev Deploy Finished!" Importance="high"/>
+   </Target>
+   <!--
+   <Target Name="AzureDeploy" DependsOnTargets="AzureDeployProperties">
+      <CallTarget Targets="SetGitTag"/>
+      <Message Text="Stage Deploy Finished!" Importance="high"/>
+   </Target>   
+    -->
+</Project>

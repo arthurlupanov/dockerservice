@@ -1,0 +1,11 @@
+﻿.git
+.vs
+packages
+PublishOutput
+DockerService/bin
+DockerService/obj
+clean.ps1
+deploy.ps1
+Dockerfile-Build
+.dockerignore
+.gitignore

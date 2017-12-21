@@ -1,0 +1,31 @@
+﻿@using DockerService.Models
+@model List<JobResultViewModel>
+@{
+   ViewBag.Title = "JobResults";
+}
+<h2>@ViewBag.Title.</h2>
+<table>
+   <thead>
+      <tr>
+         <th>
+            Created
+         </th>
+         <th>
+            Machine Name
+         </th>
+         <th>
+            Result
+         </th>
+      </tr>
+   </thead>
+   <tbody>
+      @foreach(var jobResult in Model)
+      {
+         <tr>
+            <td>@jobResult.Created.ToString("yyyy/MM/dd hh:mm")</td>
+            <td>@jobResult.MachineName</td>
+            <td>@jobResult.Result</td>
+         </tr>
+      }
+   </tbody>
+</table>
